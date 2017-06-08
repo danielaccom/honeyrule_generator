@@ -1,12 +1,18 @@
 import pickle
 import socket
+import sys
 
 if __name__ == '__main__':
+
+	if(len(sys.argv) < 2):
+		print 'usage: argument 1 = ip, argument 2 = port'
+		exit()
+
 	f = open("apache.pickle")
 	worms = pickle.load(f)
 
-	remote_ip = '192.168.149.131'
-	port = 80
+	remote_ip = sys.argv[1]
+	port = int(sys.argv[2])
 	
 	for i in range(0,100):
 		print '####attempt %d####' % (i+1)

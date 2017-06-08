@@ -16,9 +16,12 @@ def convert_snort_signature(generated_polygraph_signature):
 
 if __name__ == '__main__':
 
+	#limit sample because algorithm o(n^2)
+	limit = 100
+
 	#load worm workloads
-	f = open("apache.pickle")
-	worms = cPickle.load(f)[:8]
+	f = open("worm.pickle")
+	worms = cPickle.load(f)[:limit]
 	f.close()
 
 	#load innocuous pool

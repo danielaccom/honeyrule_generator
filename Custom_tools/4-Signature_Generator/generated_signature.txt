@@ -1,1 +1,0 @@
-reject tcp any any -> any 80 (pcre:"/GET .* HTTP/1.1\r\n.*: .*\r\nHost: .*\r\n.*: .*\r\nHost: .*\xff\xbf.*\r\n/"; sid:1000001; msg:"generated 1000001 rule";)
