@@ -1,6 +1,7 @@
 import pickle
 import socket
 import sys
+import random
 
 if __name__ == '__main__':
 
@@ -10,6 +11,7 @@ if __name__ == '__main__':
 
 	f = open("apache.pickle")
 	worms = pickle.load(f)
+	random.shuffle(worms)
 
 	remote_ip = sys.argv[1]
 	port = int(sys.argv[2])
