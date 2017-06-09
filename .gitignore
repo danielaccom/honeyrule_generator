@@ -101,5 +101,6 @@ ENV/
 .mypy_cache/
 
 # custom
-.pickle
+*.pickle
 generated_signature.txt
+Custom_tools/3-Worms_Aggregator/log/

@@ -13,7 +13,13 @@ if __name__ == '__main__':
 		#regex for traffic in log
 		pattern = r"\('in', b'(.+)'\)"
 		matchObj = re.search(pattern,f.read())
-		sample = matchObj.group(1).decode('string-escape')
+
+		#delete one \x0d0a if double in last line(some bugs in polygraph signature generator if 2)
+		sample = matchObj.group(1)
+		if(sample[-16:].lower() == '\\x0d\\x0a\\x0d\\x0a'.lower()):
+			sample = sample[:-8]
+		sample = sample.decode('string-escape')
+
 		worms.append(sample)
 		f.close()
 
