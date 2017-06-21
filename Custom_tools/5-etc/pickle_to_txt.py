@@ -1,19 +1,19 @@
 import cPickle
-import os
+import sys
 
 if __name__ == '__main__':
-	for logfilename in os.listdir('.'):
-		if(logfilename.find('.pickle') != -1):
-			f = open(logfilename,'r')
-			worms = cPickle.load(f)
-			
-			#sort and limit to 100
-			#worms = worms[:100]
-			#worms.sort()
 
-			f.close()
+	if(len(sys.argv) < 2):
+		print 'invalid arguments, usage: <input.pickle> <output.txt>'
+		exit()
 
-			saved = open(logfilename[:-7] + '.txt','w')
-			for worm in worms:
-				saved.write(worm)
-			saved.close()
+	logfilename = sys.argv[1]
+
+	f = open(logfilename,'r')
+	worms = cPickle.load(f)
+	f.close()
+
+	saved = open(sys.argv[2],'w')
+	for worm in worms:
+		saved.write(worm)
+	saved.close()
