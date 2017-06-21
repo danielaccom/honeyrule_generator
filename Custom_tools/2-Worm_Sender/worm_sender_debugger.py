@@ -1,32 +1,37 @@
-import pickle
+import cPickle
 import socket
 import sys
 import random
 
 if __name__ == '__main__':
 
-	if(len(sys.argv) < 2):
-		print 'usage: argument 1 = ip, argument 2 = port'
+	if(len(sys.argv) < 3):
+		print 'usage: argument 1 = worm pickle file, argument 2 = ip destination, argument 3 port destination'
 		exit()
 
-	f = open("apache.pickle")
-	worms = pickle.load(f)
+	f = open(sys.argv[1])
+	remote_ip = sys.argv[2]
+	port = int(sys.argv[3])	
+
+	worms = cPickle.load(f)
 	random.shuffle(worms)
-
-	remote_ip = sys.argv[1]
-	port = int(sys.argv[2])
 	
+	#truncate if > 100
+	#if(len(worms) > 100):
+	#	worm_counts = 100
+	#else:
+	#	worm_counts = len(worms)
+	
+	#because debugger
+	worm_counts = len(worms)
+
 	success = 0
-	attempts = len(worms)
-	print attempts
+	failed = open('failed.pickle','w')
+	successed = open('success.pickle','w')
+	failed_worms = []
+	success_worms = []
 
-	failed = open('failed.txt','w')
-	successed = open('success.txt','w')
-	for i in range(0,8):
-		successed.write(worms[i])
-	successed.close()
-
-	for i in range(0,attempts):
+	for i in range(0,worm_counts):
 		print '####attempt %d####' % (i+1)
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -43,9 +48,17 @@ if __name__ == '__main__':
 			print(reply)
 			s.close()
 			success += 1
-			failed.write(worms[i])
+			failed_worms.append(worms[i])
 		except socket.error, e:
 			print e
+			success_worms.append(worms[i])
 
 	print '%d success' % success
+	failed = open('failed.pickle','w')
+	successed = open('success.pickle','w')
+	
+	cPickle.dump(failed_worms,failed,cPickle.HIGHEST_PROTOCOL)
+	cPickle.dump(success_worms,successed,cPickle.HIGHEST_PROTOCOL)
+
 	failed.close()
+	successed.close()

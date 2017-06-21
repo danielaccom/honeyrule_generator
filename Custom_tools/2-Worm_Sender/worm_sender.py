@@ -16,7 +16,15 @@ if __name__ == '__main__':
 	worms = pickle.load(f)
 	random.shuffle(worms)
 
-	for i in range(0,100):
+	#truncate if > 100
+	if(len(worms) > 100):
+		worm_counts = 100
+	else:
+		worm_counts = len(worms)
+	
+	success = 0
+
+	for i in range(0,worm_counts):
 		print '####attempt %d####' % (i+1)
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,5 +40,8 @@ if __name__ == '__main__':
 	
 			print(reply)
 			s.close()
+			success += 1
 		except socket.error, e:
 			print e
+
+	print '%d success' % success
