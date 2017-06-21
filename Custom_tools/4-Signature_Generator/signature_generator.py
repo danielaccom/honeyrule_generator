@@ -2,6 +2,7 @@ import sys
 sys.path.append('../polygraph')
 import cPickle
 import polygraph.sig_gen.lcseq_tree
+import time
 
 def convert_snort_signature(generated_polygraph_signature):
 	regexed_signature = '/'
@@ -11,7 +12,7 @@ def convert_snort_signature(generated_polygraph_signature):
 	regexed_signature = regexed_signature [:-2]
 	regexed_signature += '/'
 
-	snort_signature = 'reject tcp any any -> any 80 (pcre:"%s"; sid:1000001; msg:"generated 1000001 rule";)' % regexed_signature
+	snort_signature = 'reject tcp any any -> any 80 (pcre:"%s"; sid:1000001;)' % regexed_signature
 	return snort_signature
 
 if __name__ == '__main__':
@@ -33,10 +34,15 @@ if __name__ == '__main__':
 	#signature_generator = polygraph.sig_gen.lcseq_tree.LCSeqTree(pname="Token Subsequence", fname="lcseq_tree", k=3, tokenize_all=True, tokenize_pairs=False, minlen=2,statsfile=stats, spec_threshold=3, max_fp_count=5, fpos_training_streams=training_streams, min_cluster_size=3)#clustered
 
 	#generate signature and print to file
+	t0 = time.time()
 	generated_signatures = signature_generator.train(worms)
+	t1 = time.time()
+	deltat = t1-t0
 
 	f = open("generated_signature.txt",'w')
 	for generated_signature in generated_signatures:
 		f.write(convert_snort_signature(generated_signature))
 		print convert_snort_signature(generated_signature)	
 	f.close()
+	print '\n'
+	print 'elapsed time = %f s' % deltat
