@@ -1,6 +1,7 @@
+from __future__ import division
 import sys
 import cPickle
-import re
+import re 
 
 if __name__ == '__main__':
 
@@ -19,8 +20,12 @@ if __name__ == '__main__':
 	file.close()
 
 	#check traffic
+	success = 0
+	failed = 0
 	for traffic in traffics:
 		if(re.search(regex,traffic,re.M|re.I)):
-			print 'success'
+			success += 1
 		else:
-			print 'failed'
+			failed += 1
+	print 'success = %f%%' % (success/(success+failed) * 100)
+	print 'failed = %d samples' % failed
