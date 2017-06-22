@@ -7,9 +7,9 @@ import time
 def convert_snort_signature(generated_polygraph_signature):
 	regexed_signature = '/'
 	for signature_component in generated_polygraph_signature.tuplesig:
-		regexed_signature += str(signature_component).encode('string-escape')+ '.*'
-	#delete trailing dot star (.*)
-	regexed_signature = regexed_signature [:-2]
+		regexed_signature += str(signature_component).encode('string-escape')+ '(.|\\s)*'
+	#delete trailing dot star (.|\s*)
+	regexed_signature = regexed_signature [:-7]
 	regexed_signature += '/'
 
 	snort_signature = 'reject tcp any any -> any 80 (pcre:"%s"; sid:1000001;)' % regexed_signature
