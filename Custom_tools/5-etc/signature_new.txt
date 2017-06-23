@@ -1,0 +1,1 @@
+GET (.|\s)* HTTP/1.1\r\n(.|\s)*: (.|\s)*\r\nHost: (.|\s)*\r\n(.|\s)*: (.|\s)*\r\nHost: (.|\s)*\xff\xbf(.|\s)*\r\n
